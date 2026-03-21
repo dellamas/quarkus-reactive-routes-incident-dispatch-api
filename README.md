@@ -1,8 +1,8 @@
 # quarkus-reactive-routes-incident-dispatch-api
 
-Se você quiser ver `quarkus-reactive-routes` fora do exemplo genérico, este projeto é um bom ponto de partida. A aplicação simula uma API de triagem operacional com fila priorizada, resumo executivo e stream SSE para acompanhamento contínuo de incidentes.
+Este projeto mostra uma API de triagem operacional com Quarkus Reactive Routes, fila priorizada, resumo executivo e stream SSE para acompanhamento contínuo de incidentes.
 
-A base técnica aqui é simples de propósito. O foco está em mostrar a extensão funcionando num cenário que parece serviço de verdade, sem encher o projeto de infraestrutura que só atrapalha a leitura.
+A estrutura foi mantida simples para destacar a extensão e facilitar a leitura do fluxo principal da aplicação.
 
 ## Stack
 
@@ -17,8 +17,6 @@ A base técnica aqui é simples de propósito. O foco está em mostrar a extens�
 - Bean Validation
 
 ## Estrutura
-
-O fluxo principal está dividido assim:
 
 - `api/` concentra contratos e rotas HTTP
 - `domain/` define severidade, status e entidade do incidente
@@ -64,12 +62,6 @@ curl -X POST http://localhost:8080/incidents \
 
 https://quarkus.io/guides/reactive-routes
 
-## Artigo relacionado
-
-https://dev.to/dellamas/triagem-reativa-de-incidentes-operacionais-com-quarkus-reactive-routes-i6l
-
 ## LinkedIn
-
-Se quiser acompanhar mais conteúdo meu sobre Java, Quarkus, arquitetura e comunidade, me segue no LinkedIn:
 
 https://www.linkedin.com/in/luisfabriciodellamas/
