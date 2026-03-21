@@ -1,8 +1,8 @@
 # quarkus-reactive-routes-incident-dispatch-api
 
-API didática em Quarkus para despacho e triagem reativa de incidentes operacionais, com foco em observabilidade, fila priorizada, resumo executivo e stream contínuo de snapshots.
+Se você quiser ver `quarkus-reactive-routes` fora do exemplo genérico, este projeto é um bom ponto de partida. A aplicação simula uma API de triagem operacional com fila priorizada, resumo executivo e stream SSE para acompanhamento contínuo de incidentes.
 
-O projeto usa `quarkus-reactive-routes` sobre Vert.x/Netty, mantém dados em memória para demonstração rápida e expõe documentação OpenAPI/Swagger UI e health checks prontos para inspeção local. A referência principal de implementação é a documentação oficial de Reactive Routes da Quarkus: https://quarkus.io/guides/reactive-routes.
+A base técnica aqui é simples de propósito. O foco está em mostrar a extensão funcionando num cenário que parece serviço de verdade, sem encher o projeto de infraestrutura que só atrapalha a leitura.
 
 ## Stack
 
@@ -11,9 +11,19 @@ O projeto usa `quarkus-reactive-routes` sobre Vert.x/Netty, mantém dados em mem
 - Quarkus
 - Reactive Routes
 - Jackson
-- SmallRye OpenAPI e Swagger UI
+- SmallRye OpenAPI
+- Swagger UI
 - SmallRye Health
 - Bean Validation
+
+## Estrutura
+
+O fluxo principal está dividido assim:
+
+- `api/` concentra contratos e rotas HTTP
+- `domain/` define severidade, status e entidade do incidente
+- `service/` concentra a regra de triagem, ordenação e emissão do stream
+- `health/` expõe o health check da aplicação
 
 ## Endpoints
 
@@ -25,13 +35,13 @@ O projeto usa `quarkus-reactive-routes` sobre Vert.x/Netty, mantém dados em mem
 - `GET /q/swagger-ui`
 - `GET /q/health`
 
-## Executando
+## Como rodar
 
 ```bash
 mvn quarkus:dev
 ```
 
-Para rodar os testes:
+## Como testar
 
 ```bash
 mvn test
@@ -50,6 +60,16 @@ curl -X POST http://localhost:8080/incidents \
   }'
 ```
 
-## Observações
+## Documentação oficial
 
-O endpoint `GET /incidents/live` entrega `text/event-stream` com snapshots curtos do estado operacional. Para navegar pelo código ou reaproveitar o material, o repositório publicado está em https://github.com/dellamas/quarkus-reactive-routes-incident-dispatch-api. Para contato profissional do autor, o LinkedIn está em https://br.linkedin.com/in/luisfabriciodellamas.
+https://quarkus.io/guides/reactive-routes
+
+## Artigo relacionado
+
+https://dev.to/dellamas/triagem-reativa-de-incidentes-operacionais-com-quarkus-reactive-routes-i6l
+
+## LinkedIn
+
+Se quiser acompanhar mais conteúdo meu sobre Java, Quarkus, arquitetura e comunidade, me segue no LinkedIn:
+
+https://www.linkedin.com/in/luisfabriciodellamas/
