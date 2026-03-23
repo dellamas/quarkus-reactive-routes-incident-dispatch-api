@@ -61,9 +61,9 @@ public class IncidentDispatchService {
         Incident incident = new Incident(
                 "INC-" + sequence.incrementAndGet(),
                 request.severity(),
-                request.affectedService().strip(),
-                request.summary().strip(),
-                request.owner().strip(),
+                normalizeRequiredField(request.affectedService(), "affectedService"),
+                normalizeRequiredField(request.summary(), "summary"),
+                normalizeRequiredField(request.owner(), "owner"),
                 IncidentStatus.OPEN,
                 now,
                 now);
@@ -92,6 +92,17 @@ public class IncidentDispatchService {
 
     public int totalIncidents() {
         return incidents.size();
+    }
+
+    private String normalizeRequiredField(String value, String fieldName) {
+        if (value == null) {
+            throw new IllegalArgumentException(fieldName + " must not be null");
+        }
+        String normalized = value.strip();
+        if (normalized.isEmpty()) {
+            throw new IllegalArgumentException(fieldName + " must not be blank");
+        }
+        return normalized;
     }
 
     private PriorityBoardResponse priorityBoardSnapshot() {
