@@ -61,9 +61,9 @@ public class IncidentDispatchService {
         Incident incident = new Incident(
                 "INC-" + sequence.incrementAndGet(),
                 request.severity(),
-                request.affectedService().trim(),
-                request.summary().trim(),
-                request.owner().trim(),
+                request.affectedService().strip(),
+                request.summary().strip(),
+                request.owner().strip(),
                 IncidentStatus.OPEN,
                 now,
                 now);

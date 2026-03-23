@@ -64,4 +64,22 @@ class IncidentRoutesTest {
                 .body("totalsBySeverity.CRITICAL", greaterThanOrEqualTo(2))
                 .body("criticalOpenIncidents", hasSize(greaterThanOrEqualTo(2)));
     }
+    @Test
+    void shouldRejectBlankFieldsAfterTrimming() {
+        given()
+                .contentType(ContentType.JSON)
+                .body("""
+                        {
+                          "severity": "HIGH",
+                          "affectedService": "   ",
+                          "summary": "Legit summary",
+                          "owner": "platform"
+                        }
+                        """)
+                .when()
+                .post("/incidents")
+                .then()
+                .statusCode(400);
+    }
+
 }
