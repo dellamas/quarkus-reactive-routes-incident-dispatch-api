@@ -75,6 +75,15 @@ public class IncidentDispatchService {
         return Uni.createFrom().item(this::priorityBoardSnapshot);
     }
 
+    public Uni<IncidentResponse> findById(String incidentId) {
+        return incidents.stream()
+                .filter(incident -> incident.id().equalsIgnoreCase(incidentId))
+                .findFirst()
+                .map(mapper::toResponse)
+                .map(Uni.createFrom()::item)
+                .orElseGet(() -> Uni.createFrom().failure(new IllegalArgumentException("Incident not found")));
+    }
+
     public Uni<IncidentSummaryResponse> summary() {
         return Uni.createFrom().item(this::summarySnapshot);
     }

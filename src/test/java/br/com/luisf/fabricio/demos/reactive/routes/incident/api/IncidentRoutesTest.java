@@ -64,6 +64,7 @@ class IncidentRoutesTest {
                 .body("totalsBySeverity.CRITICAL", greaterThanOrEqualTo(2))
                 .body("criticalOpenIncidents", hasSize(greaterThanOrEqualTo(2)));
     }
+
     @Test
     void shouldRejectBlankFieldsAfterTrimming() {
         given()
@@ -80,6 +81,18 @@ class IncidentRoutesTest {
                 .post("/incidents")
                 .then()
                 .statusCode(400);
+    }
+
+    @Test
+    void shouldReturnIncidentById() {
+        given()
+                .accept(ContentType.JSON)
+                .when()
+                .get("/incidents/INC-1001")
+                .then()
+                .statusCode(200)
+                .body("id", equalTo("INC-1001"))
+                .body("severity", equalTo("CRITICAL"));
     }
 
 }

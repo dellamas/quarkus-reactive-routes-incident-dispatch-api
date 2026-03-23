@@ -9,6 +9,7 @@ import io.quarkus.vertx.web.RouteBase;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import io.vertx.core.http.HttpServerResponse;
+import io.vertx.ext.web.RoutingContext;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.validation.Valid;
 import org.eclipse.microprofile.openapi.annotations.Operation;
@@ -42,7 +43,7 @@ public class IncidentRoutes {
                 .onItem().transform(incident -> new CreatedIncidentEnvelope("Incident registered and queued for reactive triage.", incident));
     }
 
-    @Route(path = "priority-board", methods = Route.HttpMethod.GET)
+    @Route(path = "priority-board", methods = Route.HttpMethod.GET, order = 1)
     @Operation(summary = "Lista a fila priorizada de incidentes abertos")
     @APIResponse(responseCode = "200", description = "Fila priorizada",
             content = @Content(schema = @Schema(implementation = PriorityBoardResponse.class)))
@@ -50,7 +51,7 @@ public class IncidentRoutes {
         return service.priorityBoard();
     }
 
-    @Route(path = "summary", methods = Route.HttpMethod.GET)
+    @Route(path = "summary", methods = Route.HttpMethod.GET, order = 1)
     @Operation(summary = "Retorna o painel resumido de severidade e incidentes críticos")
     @APIResponse(responseCode = "200", description = "Resumo operacional",
             content = @Content(schema = @Schema(implementation = IncidentSummaryResponse.class)))
@@ -58,11 +59,22 @@ public class IncidentRoutes {
         return service.summary();
     }
 
-    @Route(path = "live", methods = Route.HttpMethod.GET, produces = "text/event-stream")
+    @Route(path = "live", methods = Route.HttpMethod.GET, produces = "text/event-stream", order = 1)
     @Operation(summary = "Expõe um stream simples de snapshots para triagem")
     @APIResponse(responseCode = "200", description = "Stream SSE com snapshots do despacho reativo")
     public Multi<String> live() {
         return service.liveSignals().onItem().transform(this::toSsePayload);
+    }
+
+    @Route(path = ":incidentId", methods = Route.HttpMethod.GET, order = 2)
+    @Operation(summary = "Retorna um incidente específico pelo identificador")
+    @APIResponses({
+            @APIResponse(responseCode = "200", description = "Incidente encontrado",
+                    content = @Content(schema = @Schema(implementation = IncidentResponse.class))),
+            @APIResponse(responseCode = "404", description = "Incidente não encontrado")
+    })
+    public Uni<IncidentResponse> incidentById(RoutingContext context) {
+        return service.findById(context.pathParam("incidentId"));
     }
 
     private String toSsePayload(IncidentLiveSignal signal) {
