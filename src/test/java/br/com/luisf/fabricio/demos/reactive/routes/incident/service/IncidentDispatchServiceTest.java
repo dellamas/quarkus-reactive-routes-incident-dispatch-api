@@ -19,4 +19,13 @@ class IncidentDispatchServiceTest {
 
         assertEquals("summary must not be blank", exception.getMessage());
     }
+
+    @Test
+    void shouldRejectBlankIncidentIdWhenLookingUpIncidentDirectly() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> service.findById("   ").await().indefinitely());
+
+        assertEquals("incidentId must not be blank", exception.getMessage());
+    }
+
 }

@@ -76,8 +76,9 @@ public class IncidentDispatchService {
     }
 
     public Uni<IncidentResponse> findById(String incidentId) {
+        String normalizedIncidentId = normalizeRequiredField(incidentId, "incidentId");
         return incidents.stream()
-                .filter(incident -> incident.id().equalsIgnoreCase(incidentId))
+                .filter(incident -> incident.id().equalsIgnoreCase(normalizedIncidentId))
                 .findFirst()
                 .map(mapper::toResponse)
                 .map(Uni.createFrom()::item)
